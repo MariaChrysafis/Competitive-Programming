@@ -1,7 +1,4 @@
 #include <bits/stdc++.h>
-#pragma GCC target ("avx2")
-#pragma GCC optimization ("O3")
-#pragma GCC optimization ("unroll-loops")
 using namespace std;
 const int MOD = 998244353;
 int64_t binPow (int64_t x, int64_t y) {
