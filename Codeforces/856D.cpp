@@ -58,7 +58,7 @@ struct HeavyLightDecomposition {
     vector<int> topchain;
     vector<int> depth;
     vector<int> parent;
-    SegmentTree <int64_t> st;
+    SegmentTree <int> st;
     vector<vector<int> > dp;
     vector<int> en;
     vector<int> ex;
@@ -123,7 +123,7 @@ struct HeavyLightDecomposition {
         }
     }
  
-    int64_t f (int a, int b) {
+    int f (int a, int b) {
         if (topchain[a] == topchain[b]) {
             return st.query(id[b], id[a]);
         }
@@ -132,15 +132,6 @@ struct HeavyLightDecomposition {
         } else {
             return f(parent[a], b) + st.query(id[a], id[a]);
         }
-    }
-
-    int goUp (int u, int v) {
-        for (int i = lg2; i >= 0; i--) {
-            if (!isAncestor(dp[u][i], v)) {
-                u = dp[u][i];
-            }
-        }
-        return u;
     }
  
     bool isAncestor(int u, int v) {
@@ -187,29 +178,7 @@ void dfs (int curNode, int prevNode) {
         int cost = p.first;
         int u = p.second.first;
         int v = p.second.second;
-        //cout << u << " " << v << " " << curNode << '\n';
-        if (u == curNode) {
-            swap(u, v);
-        }
-        int tot = 0;
-        if (v == curNode) {
-            tot = hlda.f(u, curNode) + cost;
-            tot -= hldb.f(u, curNode) - hldb.f(curNode, curNode);
-        } else {
-            tot = hlda.f(u, curNode) + hlda.f(v, curNode) - hlda.f(curNode, curNode) + cost;
-            tot -= hldb.f(u, curNode) + hldb.f(v, curNode) - 2 * hldb.f(curNode, curNode);
-            if (hldb.f(u, curNode) != hldb.f(u, hldb.goUp(u, curNode)) - hldb.f(curNode, curNode)) {
-                for (int i = 0; i < b.size(); i++) {
-                    cout << hldb.st.query(hldb.id[i], hldb.id[i]) << ' ';
-                }
-                cout << '\n';
-                cout << hldb.f(u, curNode) << '\n';
-                cout << u + 1 << " " << curNode + 1 << " " << hldb.goUp(u, curNode) + 1 << '\n';
-                exit(0);
-            }
-            assert(hldb.f(u, curNode) == hldb.f(u, hldb.goUp(u, curNode)) - hldb.f(curNode, curNode));
-        }
-        b[curNode] = max(b[curNode], tot);
+        b[curNode] =  max(hlda.f(u, curNode) + hlda.f(v, curNode) - hlda.f(curNode, curNode) + cost - hldb.f(u, curNode) - hldb.f(v, curNode) + 2 * hldb.f(curNode, curNode), b[curNode]);
     }
     hldb.upd(curNode, b[curNode]);
 }
