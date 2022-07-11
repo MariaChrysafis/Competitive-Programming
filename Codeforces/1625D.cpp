@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
-set<int> mySet;
+vector<int> ans;
 vector<int> v;
 int okay (int l, int r, int x, int bt) {
     while (l != r) {
@@ -31,11 +31,11 @@ void solve (int l, int r, int bt, int k) {
     for (int i = l ; i <= r; i++) {
         int ind = okay(l, r, v[i], 30);
         if ((v[ind] ^ v[i]) >= k) {
-            mySet.insert(v[ind]), mySet.insert(v[i]);
+            ans.push_back(v[ind]), ans.push_back(v[i]);
             return;
         } 
     }
-    mySet.insert(v[l]);
+    ans.push_back(v[l]);
 }
 int main() {
     ios_base::sync_with_stdio(false);
@@ -72,12 +72,12 @@ int main() {
     for (auto& p: sieve) {
         solve(p.second[0], p.second.back(), 30, k);
     }
-    if (mySet.size() <= 1) {
+    if (ans.size() <= 1) {
         cout << "-1\n";
         exit(0);
     }
-    cout << mySet.size() << '\n';
-    for (int j: mySet) {
+    cout << ans.size() << '\n';
+    for (int j: ans) {
         cout << m[j] + 1 << ' ';
     }
 }
