@@ -93,8 +93,14 @@ int main() {
             }
         }
     }
-    for (int i = 0; i < 4; i++) for (int j = i + 1; j < 4; j++) bs.push_back(make_pair(i, j));
-    for (int i = 0; i < bs.size(); i++) myMap[bs[i]] = i, myMap[make_pair(bs[i].second, bs[i].first)] = i;
+    for (int i = 0; i < 4; i++) {
+        for (int j = i + 1; j < 4; j++) {
+            bs.push_back(make_pair(i, j));
+        }
+    }
+    for (int i = 0; i < bs.size(); i++) {
+        myMap[bs[i]] = i, myMap[make_pair(bs[i].second, bs[i].first)] = i;
+    }
     dp[0][0][0] = 0;
     int myMax = 0;
     for (int i = 1; i <= n; i++) {
@@ -103,12 +109,11 @@ int main() {
                 dp[i][j][dum] = dp[i - 1][j][dum];
                 for (int prev_j = 0; prev_j < (1 << 4); prev_j++) {
                     int x = (prev_j ^ ((1 << v1[i - 1].second.first) ^ (1 << v1[i - 1].second.second)));
-                    if (x != j) continue;
-                    bool o = false;
+                    if (x != j) {
+                        continue;
+                    }
                     for (int prev_dum = 0; prev_dum < (1 << 6); prev_dum++) {
-                        assert(myMap.count(v1[i - 1].second));
                         x = (prev_dum | (1 << myMap[v1[i - 1].second]));
-                        o = true;
                         if (x != dum) continue;
                         dp[i][j][dum] = max(dp[i][j][dum], dp[i - 1][prev_j][prev_dum] + v1[i - 1].first);
                     }
