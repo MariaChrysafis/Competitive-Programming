@@ -1,3 +1,5 @@
+//copy pasted from last time i solved phidias
+
 #include <cmath>
 #include <iostream>
 #include <set>
